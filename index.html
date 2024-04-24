@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Correction</title>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <textarea id="inputText" placeholder="Enter your text here"></textarea>
+        <button onclick="correctText()">Correct</button>
+        <textarea id="outputText" placeholder="Corrected text will appear here" readonly></textarea>
+    </div>
+    <script>
+        // JavaScript code
+        function correctText() {
+            var inputText = document.getElementById("inputText").value;
+            var correctedText = correctMistakes(inputText);
+            document.getElementById("outputText").value = correctedText;
+        }
+
+        function correctMistakes(text) {
+    // Regular expressions to correct common mistakes
+    var correctedText = text.replace(/\bisnt\b/gi, "isn't").replace(/\bwasnt\b/gi, "wasn't"); // Fix "isnt" and "wasnt"
+    correctedText = correctedText.replace(/\bcant\b/gi, "can't").replace(/\bwont\b/gi, "won't"); // Fix "cant" and "wont"
+    correctedText = correctedText.replace(/\b(\w+)ing\b/gi, function(match, p1) { return p1 + "ing"; }); // Preserve present participles
+    correctedText = correctedText.replace(/\b(\w+)ed\b/gi, function(match, p1) { return p1 + "ed"; }); // Preserve past participles
+    correctedText = correctedText.replace(/\b(\wi)\b/gi, function(match, p1) { return p1.toUpperCase(); }); // Capitalize "i" when standalone
+    correctedText = correctedText.replace(/\bdoesnt\b/gi, function(match) {
+        if (/\bi\b/gi.test(correctedText)) {
+            return "don't";
+        } else {
+            return "doesn't";
+        }
+    }); // Fix "doesn't" if "I" is present
+    correctedText = correctedText.replace(/\bdidnt\b/gi, "didn't").replace(/\barent\b/gi, "aren't").replace(/\bwerent\b/gi, "weren't"); // Fix "didnt", "arent", "werent"
+    correctedText = correctedText.replace(/\bi\b/gi, function(match) { return match === 'i' ? 'I' : 'i'; }); // Capitalize "i" when standalone
+    
+    // Correct capitalization after punctuation
+    correctedText = correctedText.replace(/([.!?]\s*)(\w)/g, function(match, p1, p2) { return p1 + p2.toUpperCase(); });
+
+    // Additional spelling and grammar corrections
+    correctedText = correctedText.replace(/\bwriten\b/gi, "written"); // Fix "writen"
+    correctedText = correctedText.replace(/\bdefinatly\b/gi, "definitely"); // Fix "definatly"
+    correctedText = correctedText.replace(/\brecieve\b/gi, "receive"); // Fix "recieve"
+    correctedText = correctedText.replace(/\bwierd\b/gi, "weird"); // Fix "wierd"
+    correctedText = correctedText.replace(/\bexperiance\b/gi, "experience"); // Fix "experiance"
+    correctedText = correctedText.replace(/\boccured\b/gi, "occurred"); // Fix "occured"
+    correctedText = correctedText.replace(/\bdissapointed\b/gi, "disappointed"); // Fix "dissapointed"
+    correctedText = correctedText.replace(/\bconcious\b/gi, "conscious"); // Fix "concious"
+    correctedText = correctedText.replace(/\balot\b/gi, "a lot"); // Fix "alot"
+    correctedText = correctedText.replace(/\bremeber\b/gi, "remember"); // Fix "remeber"
+    correctedText = correctedText.replace(/\bu r\b/gi, "you are"); // Fix "u r"
+
+    // You can add more rules as needed
+
+    return correctedText;
+}
+
+    </script>
+</body>
+</html>
